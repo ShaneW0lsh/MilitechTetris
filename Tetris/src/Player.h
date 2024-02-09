@@ -19,4 +19,6 @@ class Player
     sf::Vector2f get_position();
     sf::Vector2f get_size();
     sf::Vector2f get_velocity();
+
+    void set_velocity(sf::Vector2f vel);
 };

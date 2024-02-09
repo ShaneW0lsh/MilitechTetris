@@ -26,3 +26,5 @@ void Player::draw()
 sf::Vector2f Player::get_position() { return p_position; }
 sf::Vector2f Player::get_size() { return p_size; }
 sf::Vector2f Player::get_velocity() { return p_velocity; }
+
+void Player::set_velocity(sf::Vector2f vel) { p_velocity = vel; }
