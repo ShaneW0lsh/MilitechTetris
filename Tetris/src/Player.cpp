@@ -3,8 +3,10 @@
 
 Player::Player(sf::Vector2f position, sf::Vector2f size, sf::Vector2f velocity,
                sf::RenderWindow *window)
-    : p_position(position), p_size(size), p_velocity(velocity),
-      window(window){};
+    : p_position(position), p_size(size), p_velocity(velocity), window(window)
+{
+    ++tile_state;
+}
 
 void Player::update()
 {
@@ -14,6 +16,10 @@ void Player::update()
     }
     p_position += p_velocity;
 }
+
+void Player::check_for_collisions() {}
+
+void Player::rotate() { tile_state++; }
 
 void Player::draw()
 {
