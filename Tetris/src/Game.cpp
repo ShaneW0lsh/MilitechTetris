@@ -66,8 +66,8 @@ void Game::render()
     window->clear();
 
     player->draw();
-    for (auto &cube : cubes)
-        cube->draw();
+    for (auto &block : blocks)
+        block->draw();
 
     window->display();
 }

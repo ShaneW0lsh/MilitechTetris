@@ -1,5 +1,5 @@
 #pragma once
-#include "Cube.h"
+#include "Block.h"
 #include "Player.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -17,7 +17,7 @@ class Game
     sf::Event event;
 
     Player *player;
-    std::vector<Cube *> cubes;
+    std::vector<Block *> blocks;
     uint32_t grid_size;
     uint32_t game_step;
 
