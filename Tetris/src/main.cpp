@@ -1,10 +1,26 @@
 #include "Game.h"
+#include "Player.h"
 #include <SFML/Window/VideoMode.hpp>
 
 int main()
 {
-    Game game(sf::VideoMode(800, 800), "Tetris");
-    game.run();
+    Player p = Player();
+    p.print_tile_to_console();
+
+    p.rotate();
+    std::cout << '\n';
+    p.print_tile_to_console();
+
+    p.rotate();
+    std::cout << '\n';
+    p.print_tile_to_console();
+
+    p.rotate();
+    std::cout << '\n';
+    p.print_tile_to_console();
+
+    /* Game game(sf::VideoMode(800, 800), "Tetris"); */
+    /* game.run(); */
 }
 /* sf::RenderWindow window(sf::VideoMode(800, 800), "SFML works!"); */
 /* window.setFramerateLimit(60); */
