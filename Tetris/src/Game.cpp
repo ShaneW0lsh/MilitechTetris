@@ -52,11 +52,6 @@ void Game::run()
         }
         game_step++;
 
-        /* std::cout << player->get_position().x << ' ' <<
-         * player->get_position().y */
-        /*           << std::endl; */
-        /* std::cout << "Grid size: " << grid_size << std::endl; */
-
         render();
     }
 }
