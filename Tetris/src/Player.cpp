@@ -17,9 +17,13 @@ void Player::update()
     p_position += p_velocity;
 }
 
-void Player::check_for_collisions() {}
+// Checks if the tile can be rotated without colliding with other blocks
+bool Player::can_rotate() {}
 
-void Player::rotate() { tile_state++; }
+void Player::rotate()
+{
+    if (can_rotate()) tile_state++;
+}
 
 void Player::draw()
 {

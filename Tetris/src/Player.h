@@ -11,7 +11,7 @@ class Player
 
     uint32_t tile_state;
 
-    void check_for_collisions();
+    bool can_rotate();
 
   public:
     Player(sf::Vector2f position, sf::Vector2f size, sf::Vector2f velocity,
