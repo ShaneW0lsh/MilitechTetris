@@ -21,4 +21,6 @@ class Player
     sf::Vector2f get_velocity();
 
     void set_velocity(sf::Vector2f vel);
+    void move_left(uint32_t grid_size);
+    void move_right(uint32_t grid_size);
 };

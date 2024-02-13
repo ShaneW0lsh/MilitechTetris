@@ -28,3 +28,7 @@ sf::Vector2f Player::get_size() { return p_size; }
 sf::Vector2f Player::get_velocity() { return p_velocity; }
 
 void Player::set_velocity(sf::Vector2f vel) { p_velocity = vel; }
+
+void Player::move_left(uint32_t grid_size) { p_position.x -= grid_size; }
+
+void Player::move_right(uint32_t grid_size) { p_position.x += grid_size; }
