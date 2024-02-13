@@ -7,11 +7,11 @@ class Player
     sf::Vector2f p_position;
     sf::Vector2f p_size;
     sf::Vector2f p_velocity;
-    sf::RenderWindow &window;
+    sf::RenderWindow *window;
 
   public:
     Player(sf::Vector2f position, sf::Vector2f size, sf::Vector2f velocity,
-           sf::RenderWindow &window);
+           sf::RenderWindow *window);
 
     void update();
     void draw();
