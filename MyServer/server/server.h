@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QByteArray>
 #include <QDataStream>
+#include "singleton.h"
 
 
 class MyTcpServer : public QTcpServer
@@ -19,6 +20,7 @@ private slots:
     void slotServerRead();
     void slotClientDisconnected();
     void sendToClient(QString data);
+    void connectToDatabase();
 
 private:
     QTcpSocket* socket;

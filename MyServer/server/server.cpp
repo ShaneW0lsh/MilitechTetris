@@ -1,6 +1,7 @@
 #include "server.h"
 
 
+
 MyTcpServer::MyTcpServer(QObject *parent) : QTcpServer(parent)
 {
     if (!listen(QHostAddress::Any, 5555)) {
@@ -9,6 +10,7 @@ MyTcpServer::MyTcpServer(QObject *parent) : QTcpServer(parent)
     }
     qDebug() << "...Server started...";
     connect(this, &MyTcpServer::newConnection, this, &MyTcpServer::slotNewConnection);
+    connectToDatabase();
 
 }
 
@@ -32,20 +34,26 @@ void MyTcpServer::slotClientDisconnected()
     Sockets.remove(clientSocket->socketDescriptor());
     clientSocket->deleteLater();
 }
+void MyTcpServer::connectToDatabase()
+{
+
+    Singleton& db = Singleton::getInstance();
+    if (!db.connectToDb()) {
+        qDebug() << "Failed connection to Database";
+    }
+}
 
 
 void MyTcpServer::slotServerRead()
 {
     QTcpSocket* clientSocket = qobject_cast<QTcpSocket*>(sender());
-
-
     QString str;
     while (clientSocket->bytesAvailable()) {
         QByteArray data = clientSocket->readAll();
         str += QString::fromUtf8(data);
     }
     qDebug() << "From client" << clientSocket->socketDescriptor() << ": " << str;
-    clientSocket->write(str.toUtf8());
+    clientSocket->write("From Server: " + str.toUtf8());
 }
 
 
