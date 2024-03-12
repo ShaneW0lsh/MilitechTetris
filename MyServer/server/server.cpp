@@ -52,8 +52,11 @@ void MyTcpServer::slotServerRead()
         QByteArray data = clientSocket->readAll();
         str += QString::fromUtf8(data);
     }
+    str = str.trimmed();
+    QString response = parsing(str);
+
     qDebug() << "From client" << clientSocket->socketDescriptor() << ": " << str;
-    clientSocket->write("From Server: " + str.toUtf8());
+    clientSocket->write("From Server: " + response.toUtf8());
 }
 
 

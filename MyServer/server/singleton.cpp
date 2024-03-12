@@ -25,7 +25,7 @@ bool Singleton::connectToDb()
     bool checkTable = query.exec("CREATE TABLE IF NOT EXISTS Players( Id INTEGER, Login TEXT, Password TEXT, MaxScore INTEGER, PRIMARY KEY(Id) )");
 
     if (!checkTable) {
-        qDebug() << "Error creating table 'Players': " << query.lastError().text();
+        qDebug() << "Error of  creating table 'Players': " << query.lastError().text();
         db.close();
         return false;
     }
