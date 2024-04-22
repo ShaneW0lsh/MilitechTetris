@@ -13,6 +13,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 COMPONENTS Widgets REQUIRED)
 find_package(Qt6 COMPONENTS OpenGLWidgets REQUIRED)
+find_package(Qt6 COMPONENTS Network REQUIRED)
+find_package(Qt6 COMPONENTS Sql REQUIRED)
 
 add_executable(Tetris
     src/main.cpp
@@ -22,6 +24,12 @@ add_executable(Tetris
     src/MainWindow.h
     src/GameRenderer.cpp
     src/GameRenderer.h
+    src/server/function.cpp
+    src/server/function.h
+    src/server/server.cpp
+    src/server/server.h
+    src/server/singleton.cpp
+    src/server/singleton.h
 )
 
 # file(GLOB Tetris_SRC
@@ -33,3 +41,5 @@ add_executable(Tetris
 
 target_link_libraries(Tetris PRIVATE Qt6::Widgets)
 target_link_libraries(Tetris PRIVATE Qt6::OpenGLWidgets)
+target_link_libraries(Tetris PRIVATE Qt6::Network)
+target_link_libraries(Tetris PRIVATE Qt6::Sql)

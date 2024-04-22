@@ -1,6 +1,8 @@
 #include "MainWindow.h"
 #include <QFormLayout>
 #include <QLineEdit>
+// #include <QString>
+#include "server/function.h"
 #include <qboxlayout.h>
 #include <qdebug.h>
 #include <qmainwindow.h>
@@ -84,13 +86,11 @@ void MainWindow::apply_register_button()
     QString login = usernameLineEdit->text();
     QString password = passwordLineEdit->text();
     std::cout << login.toStdString() << ' ' << password.toStdString() << '\n';
-    if (reg(login, password) == 1) {
-        QMessageBox::information(this, "Уведомление",
-                                 "Авторизация прошла успешно");
+    if (registration(login, password) == 1) {
+        std::cout << "Авторизация прошла успешно\n";
         close();
     } else {
-        QMessageBox::warning(this, "Уведомление",
-                             "Вы не авторизировались, попробуйте еще раз");
+        std::cout << "Вы не авторизировались, попробуйте еще раз\n";
     }
 }
 
