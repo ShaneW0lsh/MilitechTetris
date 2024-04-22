@@ -1,32 +1,26 @@
-#ifndef MYTCPSERVER_H
-#define MYTCPSERVER_H
-
-#include <QTcpServer>
-#include <QTcpSocket>
-#include <QDebug>
+#pragma once
+#include "function.h"
+#include "singleton.h"
 #include <QByteArray>
 #include <QDataStream>
-#include "singleton.h"
-#include "function.h"
-
-
+#include <QDebug>
+#include <QTcpServer>
+#include <QTcpSocket>
 
 class MyTcpServer : public QTcpServer
 {
     Q_OBJECT
-public:
+  public:
     explicit MyTcpServer(QObject *parent = nullptr);
 
-private slots:
+  private slots:
     void slotNewConnection();
     void slotServerRead();
     void slotClientDisconnected();
     void sendToClient(QString data);
     void connectToDatabase();
 
-private:
-    QTcpSocket* socket;
-    QList<QTcpSocket*> Sockets;
+  private:
+    QTcpSocket *socket;
+    QList<QTcpSocket *> Sockets;
 };
-
-#endif // MYTCPSERVER_H

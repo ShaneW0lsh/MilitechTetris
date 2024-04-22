@@ -1,27 +1,22 @@
-
 #ifndef SINGLETON_H
 #define SINGLETON_H
-#include <QSqlDatabase>
 #include <QDebug>
+#include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
 
-
-
 class Singleton
 {
-public:
-    static Singleton& getInstance();
+  public:
+    static Singleton &getInstance();
     QSqlDatabase db;
     bool connectToDb();
     void close();
 
-private:
+  private:
     Singleton();
-    Singleton(Singleton const&);
-    void operator=(Singleton const&);
-
-
+    Singleton(Singleton const &);
+    void operator=(Singleton const &);
 };
 
 #endif // SINGLETON_H

@@ -1,8 +1,8 @@
 #ifndef FUNCTION_H
 #define FUNCTION_H
+#include "singleton.h"
 #include <QString>
-#include<QstringList>
-#include<singleton.h>
+#include <QStringList>
 
 QString parsing(QString request);
 bool authentication(QString login, QString password);

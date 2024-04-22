@@ -1,12 +1,10 @@
-
-#include<singleton.h>
-Singleton& Singleton::getInstance()
+#include "singleton.h"
+Singleton &Singleton::getInstance()
 {
 
     static Singleton instance;
     return instance;
 }
-
 
 bool Singleton::connectToDb()
 {
@@ -21,12 +19,13 @@ bool Singleton::connectToDb()
         return false;
     }
 
-
-
-    bool checkTable = query.exec("CREATE TABLE IF NOT EXISTS Players( Id INTEGER, Login TEXT, Password TEXT, MaxScore INTEGER, PRIMARY KEY(Id) )");
+    bool checkTable =
+        query.exec("CREATE TABLE IF NOT EXISTS Players( Id INTEGER, Login "
+                   "TEXT, Password TEXT, MaxScore INTEGER, PRIMARY KEY(Id) )");
 
     if (!checkTable) {
-        qDebug() << "Error of  creating table 'Players': " << query.lastError().text();
+        qDebug() << "Error of  creating table 'Players': "
+                 << query.lastError().text();
         db.close();
         return false;
     }
@@ -39,6 +38,6 @@ void Singleton::close()
     qDebug() << "Database connection was closed";
 }
 Singleton::Singleton() {}
-Singleton::Singleton(Singleton const&)  {}
+Singleton::Singleton(Singleton const &) {}
 
-void Singleton::operator=(Singleton const&)  {}
+void Singleton::operator=(Singleton const &) {}
