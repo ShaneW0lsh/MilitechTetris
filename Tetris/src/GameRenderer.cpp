@@ -2,11 +2,6 @@
 
 GameRenderer::GameRenderer() {}
 
-void GameRenderer::initializeGL()
-{
-    //
-}
-
 void GameRenderer::paintGL()
 {
     QPainter painter(this);
