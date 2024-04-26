@@ -1,13 +1,15 @@
+
 #include "MainWindow.h"
 #include <QFormLayout>
 #include <QLineEdit>
 // #include <QString>
-#include "server/function.h"
+//#include "server/function.h"
 #include <qboxlayout.h>
 #include <qdebug.h>
 #include <qmainwindow.h>
 #include <qnamespace.h>
 #include <qpushbutton.h>
+#include <consoleclient.h>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -16,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     init_window();
     init_widgets();
     connect_widgets();
+    this->client = SingClient::getInstance();
 }
 
 MainWindow::~MainWindow() {}
@@ -86,12 +89,16 @@ void MainWindow::apply_register_button()
     QString login = usernameLineEdit->text();
     QString password = passwordLineEdit->text();
     std::cout << login.toStdString() << ' ' << password.toStdString() << '\n';
-    if (registration(login, password) == 1) {
-        std::cout << "Авторизация прошла успешно\n";
-        close();
-    } else {
-        std::cout << "Вы не авторизировались, попробуйте еще раз\n";
-    }
+    // if (registration(login, password) == 1) {
+    //     std::cout << "Авторизация прошла успешно\n";
+    //     close();
+    // } else {
+    //     std::cout << "Вы не авторизировались, попробуйте еще раз\n";
+    // }
+    registration(login,password);
+}
+void MainWindow::registration(QString login,QString password) {
+    client->sendToServer("reg " + login + " " + password);
 }
 
 void MainWindow::apply_about_button()

@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include <iostream>
@@ -8,6 +9,8 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QString>
+#include<consoleclient.h>
 
 #include <QTimer>
 
@@ -16,11 +19,12 @@
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-  public:
+public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    SingClient* client;
 
-  public slots:
+public slots:
     void apply_start_button();
     void apply_pause_button();
     void apply_about_button();
@@ -28,10 +32,11 @@ class MainWindow : public QMainWindow
 
     void update_game_area();
 
-  private:
+private:
     void init_window();
     void init_widgets();
     void connect_widgets();
+    void registration(QString login, QString password);
 
     QTimer *timer;
 
