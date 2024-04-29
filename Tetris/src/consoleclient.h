@@ -1,4 +1,3 @@
-
 #ifndef CONSOLECLIENT_H
 #define CONSOLECLIENT_H
 

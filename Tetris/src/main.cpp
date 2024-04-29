@@ -1,5 +1,3 @@
-
-
 #include "MainWindow.h"
 #include <QApplication>
 

@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include <iostream>
@@ -14,7 +13,11 @@
 
 #include <QTimer>
 
-#include "GameRenderer.h"
+#include "GameRenderer.hpp"
+
+#include "RegisterWidget.h"
+#include "AuthDialog.h"
+// #include "GameWidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -29,27 +32,49 @@ public slots:
     void apply_pause_button();
     void apply_about_button();
     void apply_register_button();
+    void handle_sign_up_info(const QString username, const QString password);
+
+    void registration(const QString login, const QString password);
+
+    void init_game_area();
+    void set_main_layout();
 
     void update_game_area();
 
 private:
+    //RegisterWidget *register_widget;
     void init_window();
     void init_widgets();
+    void show_auth_dialog();
+
+
     void connect_widgets();
-    void registration(QString login, QString password);
 
     QTimer *timer;
+    Tetris::core::Board board;
+
+    std::function<std::unique_ptr<Tetris::core::Tetromino>()> piece_randomizer;
 
     QPushButton *start_button;
     QPushButton *pause_button;
     QPushButton *about_button;
     QPushButton *register_button;
+    QPushButton *sign_in_button;
+    QPushButton *sign_up_button;
 
     QHBoxLayout *main_layout;
     QHBoxLayout *buttons_layout;
 
-    QLineEdit *usernameLineEdit;
-    QLineEdit *passwordLineEdit;
+    QLineEdit *username_line_edit;
+    QLineEdit *password_line_edit;
 
-    GameRenderer *game_renderer;
+    AuthDialog* ad;
+
+    Tetris::gui::GameRenderer *game_renderer;
+
+    unsigned lines;
+    unsigned level;
+    unsigned score;
+protected:
+    void keyReleaseEvent(QKeyEvent* e) override;
 };
