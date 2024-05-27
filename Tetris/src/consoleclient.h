@@ -1,7 +1,9 @@
 #ifndef CONSOLECLIENT_H
 #define CONSOLECLIENT_H
 
-
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QTcpSocket>
 #include <QDebug>
 
@@ -37,5 +39,7 @@ public:
     QString sendToServer(const QString&);
 protected slots:
     void slot_readFromServer();
+signals:
+    void userScoresReceived(const QVector<QPair<QString, int>>& userScores);
 };
 #endif // CONSOLECLIENT_H

@@ -19,6 +19,22 @@ QString parsing(QString request) {
             response = "Error registration";
         }
     }
+    if (request == "get_user_scores") {
+        QVector<QPair<QString, int>> scores = getUserScores();
+        QJsonArray jsonArray;
+
+        for (const auto& pair : scores) {
+            QJsonObject jsonObj;
+            jsonObj["login"] = pair.first;
+            jsonObj["max_score"] = pair.second;
+            jsonArray.append(jsonObj);
+        }
+
+        QJsonDocument jsonDoc(jsonArray);
+        return jsonDoc.toJson(QJsonDocument::Compact);
+    }
+
+    return "Unknown request";
     return response;
 }
 
@@ -70,7 +86,18 @@ bool checkUser(QString login,QString password) {
         return true;
     }
     return false;
+}
 
+QVector<QPair<QString, int>> getUserScores()
+{
+    QVector<QPair<QString, int>> userScores;
+    QSqlQuery query("SELECT Login, MaxScore FROM Players");
 
+    while (query.next()) {
+        QString login = query.value(0).toString();
+        int maxScore = query.value(1).toInt();
+        userScores.append(qMakePair(login, maxScore));
+    }
 
+    return userScores;
 }

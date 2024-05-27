@@ -7,3 +7,4 @@ Makefile
 cmake_install.cmake
 compile_commands.json
 .clang-format
+build-tetris-Desktop_Qt_6_8_0_MinGW_64_bit-Debug

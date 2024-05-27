@@ -13,10 +13,10 @@ bool Singleton::connectToDb()
     QString currentDir = QCoreApplication::applicationDirPath();
     qDebug() << "Current Dir Path: " << currentDir << '\n';
     db = QSqlDatabase::addDatabase("QSQLITE");
-    QString databaseName = currentDir + "/../server/database.db";
-    qDebug() << databaseName << '\n';
-    //db.setDatabaseName("/home/shane/dev/MilitechTetrisV2/MilitechTetris/server/server/database.db");
-    db.setDatabaseName(databaseName);
+    //QString databaseName = currentDir + "/../server/database.db";
+    db.setDatabaseName("C:\\Qt\\PolytechWork\\MilitechTetris\\server\\server\\database.db");
+    //qDebug() << databaseName << '\n';
+    //db.setDatabaseName(databaseName);
     QSqlQuery query(db);
 
     if (!db.open()) {

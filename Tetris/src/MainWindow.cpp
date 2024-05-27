@@ -7,17 +7,19 @@
 #include <qnamespace.h>
 #include <qpushbutton.h>
 #include <consoleclient.h>
-#include <QStackedLayout>
+
+
+
+
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
-{
+{   client = SingClient::getInstance();
     init_window();
     init_widgets();
     connect_widgets();
     set_main_layout();
     show_auth_dialog();
-
-    client = SingClient::getInstance();
+    show_scores_button();
 }
 
 MainWindow::~MainWindow() {}
@@ -209,3 +211,61 @@ void MainWindow::keyReleaseEvent(QKeyEvent *e)
         }
     }
 }
+void MainWindow::show_scores_button() {
+    showScoresButton = new QPushButton("Show User Scores", this);
+    main_layout->addWidget(showScoresButton);
+
+    QWidget *centralWidget = new QWidget(this);
+    centralWidget->setLayout(main_layout);
+    setCentralWidget(centralWidget);
+
+    connect(showScoresButton, &QPushButton::clicked, this, &MainWindow::on_showScoresButton_clicked);
+    connect(client, &SingClient::userScoresReceived, this, &MainWindow::handleUserScores);
+}
+void MainWindow::on_showScoresButton_clicked()
+{
+    resize(width() + 100, height() + 100);
+    client->sendToServer("get_user_scores");
+
+
+}
+
+void MainWindow::handleUserScores(const QVector<QPair<QString, int>> &userScores)
+{
+    // Создаем новое диалоговое окно
+    QDialog *userScoresDialog = new QDialog(this);
+    userScoresDialog->setWindowTitle("User Scores");
+
+    // Создаем таблицу для отображения пользовательских оценок
+    QTableWidget *tableWidget = new QTableWidget(userScoresDialog);
+    tableWidget->setRowCount(userScores.size());
+    tableWidget->setColumnCount(2);
+    tableWidget->setHorizontalHeaderLabels({"Username", "Max Score"});
+
+    // Заполняем таблицу данными
+    for (int i = 0; i < userScores.size(); ++i) {
+        QTableWidgetItem *usernameItem = new QTableWidgetItem(userScores[i].first);
+        QTableWidgetItem *maxScoreItem = new QTableWidgetItem(QString::number(userScores[i].second));
+        tableWidget->setItem(i, 0, usernameItem);
+        tableWidget->setItem(i, 1, maxScoreItem);
+    }
+
+    // Создаем кнопку для закрытия окна
+    QPushButton *closeButton = new QPushButton("Close", userScoresDialog);
+    QObject::connect(closeButton, &QPushButton::clicked, userScoresDialog, &QDialog::close);
+
+    // Создаем компоновку для размещения таблицы и кнопки
+    QVBoxLayout *layout = new QVBoxLayout(userScoresDialog);
+    layout->addWidget(tableWidget);
+    layout->addWidget(closeButton);
+
+    // Устанавливаем компоновку для диалогового окна
+    userScoresDialog->setLayout(layout);
+
+    // Показываем диалоговое окно
+    userScoresDialog->exec();
+}
+
+
+
+

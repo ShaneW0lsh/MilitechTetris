@@ -44,7 +44,25 @@ void SingClient::slot_readFromServer()
     }
     data.clear();
     Message = message;
-    qDebug() <<"Message from server:" << message;
+
+    // Проверяем, что полученный ответ содержит список пользователей и их счета
+    if (Message.startsWith("[") && Message.endsWith("]")) {
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(Message.toUtf8());
+        if (jsonDoc.isArray()) {
+            QVector<QPair<QString, int>> userScores;
+            QJsonArray jsonArray = jsonDoc.array();
+            foreach (const QJsonValue &value, jsonArray) {
+                if (value.isObject()) {
+                    QJsonObject obj = value.toObject();
+                    QString login = obj["login"].toString();
+                    int maxScore = obj["max_score"].toInt();
+                    userScores.append(qMakePair(login, maxScore));
+                }
+            }
+            emit userScoresReceived(userScores);
+        }
+    }
 }
+
 SingClient * SingClient::p_instance;
 SingClientDestroyer SingClient::destroyer;

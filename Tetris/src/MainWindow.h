@@ -10,14 +10,23 @@
 #include <QPushButton>
 #include <QString>
 #include<consoleclient.h>
+#include <QTableWidget>
+#include <QStackedLayout>
+#include <QTableWidget>
+#include <QVBoxLayout>
+#include <QHeaderView>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 #include <QTimer>
 
 #include "GameRenderer.hpp"
 
-#include "RegisterWidget.h"
+//#include "RegisterWidget.h"
 #include "AuthDialog.h"
-// #include "GameWidget.h"
+//#include "GameWidget.h"
+
 
 class MainWindow : public QMainWindow
 {
@@ -41,11 +50,19 @@ public slots:
 
     void update_game_area();
 
+    void on_showScoresButton_clicked();
+    void handleUserScores(const QVector<QPair<QString, int>> &userScores);
+
+
+
 private:
     //RegisterWidget *register_widget;
     void init_window();
     void init_widgets();
     void show_auth_dialog();
+    void show_scores_button();
+
+
 
 
     void connect_widgets();
@@ -61,6 +78,15 @@ private:
     QPushButton *register_button;
     QPushButton *sign_in_button;
     QPushButton *sign_up_button;
+
+
+
+    QPushButton *showScoresButton;
+
+
+
+
+
 
     QHBoxLayout *main_layout;
     QHBoxLayout *buttons_layout;
