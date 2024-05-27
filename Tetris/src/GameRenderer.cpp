@@ -1,82 +1,116 @@
-#include "GameRenderer.hpp"
-#include <iostream>
+/**
+ * @file GameRenderer.hpp
+ * @brief Заголовочный файл для класса GameRenderer
+ */
 
-Tetris::gui::GameRenderer::GameRenderer()
-    : m_board(nullptr), m_gameOver(false), m_cellSize(0), m_marginLeft(0), m_marginTop(0)
-{
+#pragma once
 
-}
+#include <QPainter>
+#include <QPainterPath>
+#include <QColor>
+#include <QFont>
+#include <QWidget>
+#include <vector>
+#include "Board.hpp"
+#include "RendererFacilities.hpp"
 
-void Tetris::gui::GameRenderer::initializeGL(){
-    //
-}
+namespace Tetris::gui {
 
-void Tetris::gui::GameRenderer::paintGL(){
-    if(m_gameOver){
-        drawGameOverScreen();
-        return;
-    }
-    QPainter painter(this);
-    painter.setPen(Qt::black);
-    painter.fillRect(0,0,this->width(), this->height(),QBrush(Qt::black));
+/**
+     * @class GameRenderer
+     * @brief Класс для отрисовки игрового поля и элементов игры
+     */
+class GameRenderer : public QWidget {
+    Q_OBJECT
 
-    if(m_board){
-        m_cellSize = this->height() / Tetris::core::Board::m_height;
-        m_marginLeft = (this->width() - Tetris::core::Board::m_width * m_cellSize) / 2;
-        m_marginTop = this->height() - Tetris::core::Board::m_height * m_cellSize;
-        for(int i = 0; i < Tetris::core::Board::m_height; ++i){
-            for(int j = 0; j < Tetris::core::Board::m_width; ++j){
-                if(m_board->getCell(j,i) != EMPTY_CELL){
-                    Tetris::gui::RendererFacilities::drawBlock(painter, m_marginLeft + j * m_cellSize, m_marginTop + i * m_cellSize, m_cellSize, m_board->getCharColor(m_board->getCell(j,i)));
-                }else{
-                    painter.setPen(Qt::blue);
-                    painter.drawRect(m_marginLeft + j * m_cellSize, m_marginTop + i * m_cellSize, m_cellSize, m_cellSize);
-                }
-            }
-        }
-        for(const auto& shape : m_extraShapes){
-            painter.fillPath(shape, m_extraColor);
-        }
-    }
-}
+public:
+    /**
+         * @brief Конструктор класса GameRenderer
+         */
+    GameRenderer();
 
-void Tetris::gui::GameRenderer::drawGameOverScreen(){
-    QPainter painter(this);
-    painter.fillRect(0,0,this->width(), this->height(), QBrush(Qt::red));
-    painter.setFont(QFont("Courier", 36, QFont::DemiBold));
-    painter.drawText(0, 0, width(), height(), Qt::AlignCenter, "GAME OVER!");
-    painter.end();
-}
+    /**
+         * @brief Инициализация OpenGL
+         */
+    void initializeGL();
 
-void Tetris::gui::GameRenderer::resizeGL(int w, int h){
-    glViewport(0, 0, w, h);
-}
+    /**
+         * @brief Отрисовка содержимого OpenGL
+         */
+    void paintGL();
 
-void Tetris::gui::GameRenderer::setBoard(Tetris::core::Board *board){
-    m_board = board;
-}
+    /**
+         * @brief Отрисовка экрана завершения игры
+         */
+    void drawGameOverScreen();
 
-void Tetris::gui::GameRenderer::setGameOver(bool b){
-    m_gameOver = b;
-}
+    /**
+         * @brief Изменение размеров OpenGL
+         * @param w Ширина
+         * @param h Высота
+         */
+    void resizeGL(int w, int h);
 
-void Tetris::gui::GameRenderer::setExtraColor(const QColor &c){
-    m_extraColor = c;
-}
+    /**
+         * @brief Установить игровое поле
+         * @param board Указатель на игровое поле
+         */
+    void setBoard(Tetris::core::Board *board);
 
-void Tetris::gui::GameRenderer::setExtraShapes(const std::vector<QPainterPath> &extraShapes){
-    m_extraShapes = extraShapes;
-}
+    /**
+         * @brief Установить статус завершения игры
+         * @param b Статус завершения игры
+         */
+    void setGameOver(bool b);
 
-unsigned Tetris::gui::GameRenderer::getCellSize() const {
-    return m_cellSize;
-}
+    /**
+         * @brief Установить дополнительный цвет
+         * @param c Цвет
+         */
+    void setExtraColor(const QColor &c);
 
-unsigned Tetris::gui::GameRenderer::getMarginTop() const{
-    return m_marginTop;
-}
+    /**
+         * @brief Установить дополнительные формы
+         * @param extraShapes Вектор дополнительных форм
+         */
+    void setExtraShapes(const std::vector<QPainterPath> &extraShapes);
 
-unsigned Tetris::gui::GameRenderer::getMarginLeft() const{
-    return m_marginLeft;
-}
+    /**
+         * @brief Получить размер ячейки
+         * @return Размер ячейки
+         */
+    unsigned getCellSize() const;
 
+    /**
+         * @brief Получить отступ сверху
+         * @return Отступ сверху
+         */
+    unsigned getMarginTop() const;
+
+    /**
+         * @brief Получить отступ слева
+         * @return Отступ слева
+         */
+    unsigned getMarginLeft() const;
+
+private:
+    Tetris::core::Board *m_board; ///< Указатель на игровое поле
+    bool m_gameOver; ///< Флаг завершения игры
+    unsigned m_cellSize; ///< Размер ячейки
+    unsigned m_marginLeft; ///< Отступ слева
+    unsigned m_marginTop; ///< Отступ сверху
+    QColor m_extraColor; ///< Дополнительный цвет
+    std::vector<QPainterPath> m_extraShapes; ///< Вектор дополнительных форм
+
+    /**
+         * @brief Конструктор копирования класса GameRenderer
+         */
+    GameRenderer(const GameRenderer&) = delete;
+
+    /**
+         * @brief Оператор присваивания класса GameRenderer
+         */
+    GameRenderer& operator=(const GameRenderer&) = delete;
+};
+
+} // namespace Tetris::gui

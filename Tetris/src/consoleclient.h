@@ -1,35 +1,41 @@
+/**
+ * @file consoleclient.h
+ * @brief Заголовочный файл для консольного клиента
+ */
+
 #ifndef CONSOLECLIENT_H
 #define CONSOLECLIENT_H
 
-
 #include <QTcpSocket>
 #include <QDebug>
-
 #include <QObject>
 
 class SingClient;
 
-class SingClientDestroyer{
+class SingClientDestroyer {
 private:
-    SingClient * p_instance;
+    SingClient* p_instance;
 public:
-    ~SingClientDestroyer() { delete p_instance;}
-    void initialize(SingClient * p){p_instance = p;}
+    ~SingClientDestroyer() { delete p_instance; }
+    void initialize(SingClient* p) { p_instance = p; }
 };
 
-
+/**
+ * @class SingClient
+ * @brief Класс консольного клиента
+ */
 class SingClient : public QObject
 {
     Q_OBJECT
 private:
-    static SingClient * p_instance;
+    static SingClient* p_instance;
     static SingClientDestroyer destroyer;
     QTcpSocket* socket;
     QString Message;
 public:
     explicit SingClient();
-    SingClient(const SingClient& ) = delete ;
-    SingClient& operator = (SingClient &) = delete;
+    SingClient(const SingClient&) = delete;
+    SingClient& operator=(SingClient&) = delete;
     ~SingClient();
     friend class SingClientDestroyer;
 public:
@@ -38,4 +44,6 @@ public:
 protected slots:
     void slot_readFromServer();
 };
+
 #endif // CONSOLECLIENT_H
+*/

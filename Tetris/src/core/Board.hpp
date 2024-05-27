@@ -7,60 +7,144 @@
 #include <QColor>
 
 namespace Tetris::core{
+/**
+ * @class Board
+ * @brief Представляет игровое поле для игры Тетрис.
+ */
+class Board{
+public:
 
+    /**
+     * @brief Создает новый объект Board.
+     */
+    Board();
 
-    class Board{
-    public:
+    /**
+     * @brief Очищает игровое поле.
+     */
+    void clear();
 
+    /**
+     * @brief Стирает линии в указанном диапазоне.
+     * @param range Пара целых чисел, представляющих начало и конец диапазона.
+     */
+    void eraseLines(const std::pair<int, int>& range);
 
-        Board();
+    /**
+     * @brief Получает константную ссылку на игровое поле.
+     * @return const auto& Константная ссылка на игровое поле.
+     */
+    const auto& getBoard() const;
 
-        void clear();
+    /**
+     * @brief Опускает текущую фигуру вниз до самого низа игрового поля.
+     */
+    void dropCurrentPiece();
 
-        void eraseLines(const std::pair<int, int>& range);
+    /**
+     * @brief Проверяет, закончена ли игра.
+     * @return true Если игра закончена, false в противном случае.
+     */
+    bool isGameOver() const;
 
-        const auto& getBoard() const;
+    /**
+     * @brief Проверяет, может ли текущая фигура двигаться вниз.
+     * @return true Если фигура может двигаться вниз, false в противном случае.
+     */
+    bool canMoveCurrentPieceDown() const;
 
-        void dropCurrentPiece();
+    /**
+     * @brief Проверяет, может ли текущая фигура двигаться влево.
+     * @return true Если фигура может двигаться влево, false в противном случае.
+     */
+    bool canMoveCurrentPieceLeft() const;
 
-        bool isGameOver() const;
+    /**
+     * @brief Проверяет, может ли текущая фигура двигаться вправо.
+     * @return true Если фигура может двигаться вправо, false в противном случае.
+     */
+    bool canMoveCurrentPieceRight() const;
 
-        bool canMoveCurrentPieceDown() const;
+    /**
+     * @brief Проверяет, может ли текущая фигура быть повернута.
+     * @return true Если фигура может быть повернута, false в противном случае.
+     */
+    bool canRotateCurrentPiece() const;
 
-        bool canMoveCurrentPieceLeft() const;
+    /**
+     * @brief Проверяет, находится ли указанная координата x в пределах ширины игрового поля.
+     * @param x Координата x для проверки.
+     * @return true Если координата находится в пределах ширины игрового поля, false в противном случае.
+     */
+    constexpr static bool isWithinBoardWidth(const int x);
 
-        bool canMoveCurrentPieceRight() const;
+    /**
+     * @brief Проверяет наличие заполненных линий на игровом поле.
+     * @return std::pair<int, int> Пара целых чисел, представляющих начало и конец диапазона заполненных линий.
+     */
+    std::pair<int, int> hasCompletedLines() const;
 
-        bool canRotateCurrentPiece() const;
+    /**
+     * @brief Устанавливает текущую фигуру.
+     * @param t Уникальный указатель на объект Tetromino.
+     */
+    void setCurrentPiece(std::unique_ptr<Tetris::core::Tetromino> t);
 
-        constexpr static bool isWithinBoardWidth(const int x);
+    /**
+     * @brief Устанавливает следующую фигуру.
+     * @param t Уникальный указатель на объект Tetromino.
+     */
+    void setNextPiece(std::unique_ptr<Tetris::core::Tetromino> t);
 
-        std::pair<int, int> hasCompletedLines() const;
+    /**
+     * @brief Меняет местами текущую и следующую фигуры.
+     * @param next Уникальный указатель на объект Tetromino.
+     */
+    void swapPieces(std::unique_ptr<Tetris::core::Tetromino> next);
 
-        void setCurrentPiece(std::unique_ptr<Tetris::core::Tetromino> t);
+    /**
+     * @brief Получает текущую фигуру.
+     * @return Tetromino* Указатель на текущий объект Tetromino.
+     */
+    Tetromino* getCurrentPiece();
 
-        void setNextPiece(std::unique_ptr<Tetris::core::Tetromino> t);
+    /**
+     * @brief Получает следующую фигуру.
+     * @return Tetromino* Указатель на следующий объект Tetromino.
+     */
+    Tetromino* getNextPiece();
 
-        void swapPieces(std::unique_ptr<Tetris::core::Tetromino> next);
+    /**
+     * @brief Получает ячейку в указанном месте на игровом поле.
+     * @param x Координата x ячейки.
+     * @param y Координата y ячейки.
+     * @return char Символ, представляющий ячейку.
+     */
+    char getCell(const int x, const int y) const;
 
-        Tetromino* getCurrentPiece();
+    /**
+     * @brief Получает цвет, ассоциированный с указанным символом.
+     * @param c Символ, для которого нужно получить цвет.
+     * @return QColor Цвет, ассоциированный с символом.
+     */
+    static QColor getCharColor(const char c);
 
-        Tetromino* getNextPiece();
+    /**
+     * @brief Высота игрового поля.
+     */
+    constexpr static int m_height = 22;
 
-        char getCell(const int x, const int y) const;
+    /**
+     * @brief Ширина игрового поля.
+     */
+    constexpr static int m_width = 10;
 
-        static QColor getCharColor(const char c);
+private:
 
-        constexpr static int m_height = 22;
+    std::array<std::array<char, m_width>, m_height> m_board; /**< Игровое поле. */
 
-        constexpr static int m_width = 10;
+    std::unique_ptr<Tetris::core::Tetromino> m_currentPiece; /**< Текущая фигура. */
 
-    private:
-
-        std::array<std::array<char, m_width>, m_height> m_board;
-
-        std::unique_ptr<Tetris::core::Tetromino> m_currentPiece;
-
-        std::unique_ptr<Tetris::core::Tetromino> m_nextPiece;
-    };
+    std::unique_ptr<Tetris::core::Tetromino> m_nextPiece; /**< Следующая фигура. */
+};
 }

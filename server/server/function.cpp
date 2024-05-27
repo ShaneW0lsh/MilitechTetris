@@ -1,5 +1,15 @@
+/**
+ * @file function.h
+ * @brief Заголовочный файл с объявлением функций для работы с базой данных.
+ */
 
 #include<function.h>
+
+/**
+ * @brief Функция для разбора запроса от клиента.
+ * @param request - строка с запросом от клиента
+ * @return строка с ответом на запрос от клиента
+ */
 QString parsing(QString request) {
     QStringList parseRequest = request.split(' ');
     QString action = parseRequest[0];
@@ -22,6 +32,12 @@ QString parsing(QString request) {
     return response;
 }
 
+/**
+ * @brief Функция для аутентификации пользователя.
+ * @param login - логин пользователя
+ * @param password - пароль пользователя
+ * @return true, если аутентификация прошла успешно, иначе false
+ */
 bool authentication(QString login, QString password) {
 
     Singleton& dataBase = Singleton::getInstance();
@@ -36,6 +52,13 @@ bool authentication(QString login, QString password) {
     }
     return false;
 }
+
+/**
+ * @brief Функция для регистрации нового пользователя.
+ * @param login - логин нового пользователя
+ * @param password - пароль нового пользователя
+ * @return true, если регистрация прошла успешно, иначе false
+ */
 bool registration(QString login,QString password) {
 
     if (!checkUser(login,password)) {
@@ -56,8 +79,14 @@ bool registration(QString login,QString password) {
 
     return false;
 }
-bool checkUser(QString login,QString password) {
 
+/**
+ * @brief Функция для проверки существования пользователя в базе данных.
+ * @param login - логин пользователя
+ * @param password - пароль пользователя
+ * @return true, если пользователь существует в базе данных, иначе false
+ */
+bool checkUser(QString login,QString password) {
 
     Singleton& dataBase = Singleton::getInstance();
 
@@ -70,7 +99,4 @@ bool checkUser(QString login,QString password) {
         return true;
     }
     return false;
-
-
-
 }

@@ -1,3 +1,10 @@
+/**
+ * @class MainWindow
+ * @brief Главное окно приложения "Тетрис".
+ *
+ * Этот класс представляет главное окно приложения "Тетрис". Он содержит все виджеты, необходимые для игры,
+ * такие как игровая zona, кнопки управления и диалоговое окно авторизации.
+ */
 #include "MainWindow.h"
 #include <QFormLayout>
 #include <QLineEdit>
@@ -8,7 +15,11 @@
 #include <qpushbutton.h>
 #include <consoleclient.h>
 #include <QStackedLayout>
-
+/**
+     * @brief Конструктор класса MainWindow.
+     *
+     * @param parent Указатель на родительский виджет.
+     */
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     init_window();
@@ -19,20 +30,34 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     client = SingClient::getInstance();
 }
-
+/**
+     * @brief Деструктор класса MainWindow.
+     */
 MainWindow::~MainWindow() {}
-
+/**
+     * @brief Инициализация окна.
+     *
+     * Эта функция устанавливает размеры и заголовок главного окна.
+     */
 void MainWindow::show_auth_dialog()
 {
     ad->show();
 }
-
+/**
+     * @brief Инициализация виджетов.
+     *
+     * Эта функция инициализирует все виджеты, используемые в главном окне.
+     */
 void MainWindow::init_window()
 {
     setFixedSize(800, 600);
     setWindowTitle(QString("Tetris"));
 }
-
+/**
+     * @brief Подключение виджетов.
+     *
+     * Эта функция устанавливает соединения между сигналами и слотами виджетов.
+     */
 void MainWindow::init_widgets()
 {
     ad = new AuthDialog(this);
@@ -47,7 +72,11 @@ void MainWindow::init_widgets()
     piece_randomizer = Tetris::core::TetrominoFactory::UniformPieceRandomizer;
     this->game_renderer = new Tetris::gui::GameRenderer();
 }
-
+/**
+     * @brief Установка главной раскладки.
+     *
+     * Эта функция устанавливает главную раскладку для главного окна.
+     */
 void MainWindow::set_main_layout()
 {
     register_button->setFont(QFont("Arial", 14));
@@ -69,6 +98,11 @@ void MainWindow::set_main_layout()
     this->setCentralWidget(mainWidget);
 }
 
+/**
+     * @brief Установка главной раскладки.
+     *
+     * Эта функция устанавливает главную раскладку для главного окна.
+     */
 void MainWindow::connect_widgets()
 {
     QObject::connect(start_button, SIGNAL(clicked()), this,
@@ -81,12 +115,23 @@ void MainWindow::connect_widgets()
     QObject::connect(ad, SIGNAL(sign_up_clicked(const QString, const QString)), this,
                      SLOT(registration(const QString, const QString)));
 }
-
+/**
+     * @brief Обработка информации о регистрации.
+     *
+     * Эта функция обрабатывает информацию о регистрации, полученную от диалогового окна авторизации.
+     *
+     * @param username Имя пользователя.
+     * @param password Пароль.
+     */
 void MainWindow::handle_sign_up_info(const QString username, const QString password)
 {
     qDebug() << username << ' ' << password;
 }
-
+/**
+     * @brief Инициализация игровой зоны.
+     *
+     * Эта функция инициализирует игровую зону.
+     */
 void MainWindow::init_game_area(){
     if(start_button->text() == "Resume"){
         timer->start();
@@ -109,7 +154,11 @@ void MainWindow::init_game_area(){
     }
 }
 
-
+/**
+     * @brief Обновление игровой зоны.
+     *
+     * Эта функция обновляет игровую зону.
+     */
 void MainWindow::update_game_area()
 {
     qDebug() << "Frame\n";
@@ -146,13 +195,21 @@ void MainWindow::update_game_area()
     }
     game_renderer->update();
 }
-
+/**
+     * @brief Применение кнопки "Старт".
+     *
+     * Эта функция запускает таймер для обновления игровой зоны.
+     */
 void MainWindow::apply_start_button()
 {
     qDebug() << "Start Button Applied!";
     timer->start(200);
 }
-
+/**
+     * @brief Применение кнопки "Пауза".
+     *
+     * Эта функция останавливает таймер для обновления игровой зоны.
+     */
 void MainWindow::apply_pause_button()
 {
     qDebug() << "Pause Button Applied!";
@@ -160,6 +217,11 @@ void MainWindow::apply_pause_button()
     start_button->setText("Resume");
 }
 
+/**
+     * @brief Применение кнопки "Зарегистрироваться".
+     *
+     * Эта функция обрабатывает нажатие кнопки "Зарегистрироваться" и выводит информацию о регистрации.
+     */
 void MainWindow::apply_register_button()
 {
     QString login = username_line_edit->text();
@@ -168,19 +230,36 @@ void MainWindow::apply_register_button()
 
     registration(login, password);
 }
-
+/**
+     * @brief Регистрация нового пользователя.
+     *
+     * Эта функция регистрирует нового пользователя с указанным именем и паролем.
+     *
+     * @param login Имя пользователя.
+     * @param password Пароль.
+     */
 void MainWindow::registration(const QString login, const QString password)
 {
     qDebug() << "reg " << login << " " << password;
     client->sendToServer("reg " + login + " " + password);
     ad->close();
 }
-
+/**
+     * @brief Применение кнопки "О программе".
+     *
+     * Эта функция выводит информацию о программе.
+     */
 void MainWindow::apply_about_button()
 {
     qDebug() << "About Button Applied!";
 }
-
+/**
+     * @brief Обработка события отпускания клавиши.
+     *
+     * Эта функция обрабатывает событие отпускания клавиши и перемещает текущую фигуру в соответствии с нажатой клавишей.
+     *
+     * @param e Указатель на событие отпускания клавиши.
+     */
 void MainWindow::keyReleaseEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Left) {

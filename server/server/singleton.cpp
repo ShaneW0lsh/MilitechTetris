@@ -1,13 +1,28 @@
+/**
+ * @file singleton.h
+ * @brief Описание класса Singleton
+ */
 #include <QCoreApplication>
 #include<singleton.h>
+/**
+ * @class Singleton
+ * @brief Класс Singleton для управления подключением к базе данных
+ */
+
 Singleton& Singleton::getInstance()
 {
-
+    /**
+     * @brief Возвращает единственный экземпляр класса Singleton
+     * @return Ссылка на экземпляр класса Singleton
+     */
     static Singleton instance;
     return instance;
 }
 
-
+/**
+     * @brief Устанавливает подключение к базе данных SQLite
+     * @return true, если подключение успешно, иначе false
+     */
 bool Singleton::connectToDb()
 {
     QString currentDir = QCoreApplication::applicationDirPath();
@@ -37,12 +52,23 @@ bool Singleton::connectToDb()
     qDebug() << "Database is connected!";
     return true;
 }
+/**
+     * @brief Закрывает подключение к базе данных
+    */
 void Singleton::close()
 {
     db.close();
     qDebug() << "Database connection was closed";
 }
+/**
+     * @brief Конструктор по умолчанию
+     */
 Singleton::Singleton() {}
+/**
+     * @brief Конструктор копирования
+     */
 Singleton::Singleton(Singleton const&)  {}
-
+/**
+     * @brief Оператор присваивания
+     */
 void Singleton::operator=(Singleton const&)  {}

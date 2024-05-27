@@ -1,6 +1,28 @@
-#include "RendererFacilities.hpp"
+/**
+ * @namespace Tetris::gui
+ * @brief Пространство имен для графического интерфейса игры "Тетрис".
+ */
 
+#include "RendererFacilities.hpp"
+/**
+ * @class RendererFacilities
+ * @brief Класс для вспомогательных функций рендеринга.
+ *
+ * Этот класс предоставляет вспомогательные функции для рендеринга графических объектов.
+ */
+/**
+     * @brief Рисует блок на игровой доске.
+     *
+     * Эта функция рисует блок на игровой доске с заданными координатами, размером и цветом.
+     *
+     * @param painter Объект QPainter для рисования на игровой доске.
+     * @param x Координата x блока на игровой доске.
+     * @param y Координата y блока на игровой доске.
+     * @param blockSize Размер блока.
+     * @param colour Цвет блока.
+     */
 void Tetris::gui::RendererFacilities::drawBlock(QPainter& painter, const int x, const int y, const int blockSize, const QColor& colour){
+
     painter.fillRect(x, y, blockSize, blockSize, QBrush(colour));
     const int trapezoidHeight = blockSize / 4;
     if(trapezoidHeight > 0){

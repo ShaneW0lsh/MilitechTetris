@@ -1,116 +1,55 @@
-#include "AuthDialog.h"
+/**
+ * @file AuthDialog.h
+ * @brief Заголовочный файл для класса AuthDialog
+ */
 
-AuthDialog::AuthDialog(QWidget *parent) : QDialog(parent)
-{
-    setFixedSize(400, 300);
-    move(screen()->geometry().center() - frameGeometry().center());
-    this->log_in_button = new QPushButton("Войти");
-    this->sign_up_button = new QPushButton("Зарегистрироваться");
+#pragma once
 
-    QVBoxLayout* layout = new QVBoxLayout;
-    layout->addWidget(log_in_button);
-    layout->addWidget(sign_up_button);
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QDebug>
+#include <QFont>
+#include <QLayoutItem>
 
-    setLayout(layout);
+/**
+ * @class AuthDialog
+ * @brief Класс диалога аутентификации
+ */
+class AuthDialog : public QDialog {
+    Q_OBJECT
 
-    connect(log_in_button, &QPushButton::clicked, this, &AuthDialog::on_log_in_button_clicked);
-    connect(sign_up_button, &QPushButton::clicked, this, &AuthDialog::on_sign_up_button_clicked);
-}
+public:
+    /**
+     * @brief Конструктор класса AuthDialog
+     * @param parent Родительский виджет
+     */
+    AuthDialog(QWidget *parent = nullptr);
 
-void AuthDialog::on_sign_up_button_clicked()
-{
-    QGridLayout *gridLayout = new QGridLayout;
-    QVBoxLayout *vboxLayout = new QVBoxLayout;
-    QHBoxLayout *hboxLayout = new QHBoxLayout;
-    QVBoxLayout *topLayout = new QVBoxLayout;
+private slots:
+    /**
+     * @brief Обработчик нажатия кнопки "Зарегистрироваться"
+     */
+    void on_sign_up_button_clicked();
 
-    username_line_edit = new QLineEdit;
-    password_line_edit = new QLineEdit;
-    password_line_edit->setEchoMode(QLineEdit::Password);
+    /**
+     * @brief Обработчик нажатия кнопки "Войти"
+     */
+    void on_log_in_button_clicked();
 
-    const QString field_style = "QLineEdit { background-color: white; color: black; }";
+signals:
+    /**
+     * @brief Сигнал о нажатии кнопки "Зарегистрироваться"
+     * @param username Имя пользователя
+     * @param password Пароль
+     */
+    void sign_up_clicked(const QString& username, const QString& password);
 
-    username_line_edit->setStyleSheet(field_style);
-    password_line_edit->setStyleSheet(field_style);
-
-    username_line_edit->setFont(QFont("Arial", 14));
-    password_line_edit->setFont(QFont("Arial", 14));
-
-    username_line_edit->setPlaceholderText("Username");
-    password_line_edit->setPlaceholderText("Password");
-
-    gridLayout->addWidget(username_line_edit, 0, 1);
-    gridLayout->addWidget(password_line_edit, 1, 1);
-
-    sign_up_button->setFont(QFont("Arial", 14));
-    sign_up_button->setMinimumWidth(username_line_edit->minimumSizeHint().width());
-    hboxLayout->addWidget(sign_up_button);
-
-    vboxLayout->addLayout(gridLayout);
-    vboxLayout->addLayout(hboxLayout);
-
-    topLayout->addLayout(vboxLayout);
-    topLayout->setContentsMargins(100, 0, 100, 0);
-
-    QLayoutItem *item;
-    while ((item = layout()->takeAt(0))) {
-        delete item->widget();
-        delete item;
-    }
-    delete layout();
-
-    qDebug() << "Hello again";
-    disconnect(sign_up_button, &QPushButton::clicked, this, &AuthDialog::on_sign_up_button_clicked);
-    connect(sign_up_button, &QPushButton::clicked, this, [this]() {
-        qDebug() << "Hello";
-        emit sign_up_clicked(username_line_edit->text(), password_line_edit->text());
-    });
-
-    setLayout(topLayout);
-    // close();
-}
-
-void AuthDialog::on_log_in_button_clicked()
-{
-    QGridLayout *gridLayout = new QGridLayout;
-    QVBoxLayout *vboxLayout = new QVBoxLayout;
-    QHBoxLayout *hboxLayout = new QHBoxLayout;
-    QVBoxLayout *topLayout = new QVBoxLayout;
-
-    username_line_edit = new QLineEdit;
-    password_line_edit = new QLineEdit;
-    password_line_edit->setEchoMode(QLineEdit::Password);
-
-    const QString field_style = "QLineEdit { background-color: white; color: black; }";
-
-    username_line_edit->setStyleSheet(field_style);
-    password_line_edit->setStyleSheet(field_style);
-
-    username_line_edit->setFont(QFont("Arial", 14));
-    password_line_edit->setFont(QFont("Arial", 14));
-
-    username_line_edit->setPlaceholderText("Username");
-    password_line_edit->setPlaceholderText("Password");
-
-    gridLayout->addWidget(username_line_edit, 0, 1);
-    gridLayout->addWidget(password_line_edit, 1, 1);
-
-    log_in_button->setFont(QFont("Arial", 14));
-    log_in_button->setMinimumWidth(username_line_edit->minimumSizeHint().width());
-    hboxLayout->addWidget(this->log_in_button);
-
-    vboxLayout->addLayout(gridLayout);
-    vboxLayout->addLayout(hboxLayout);
-
-    topLayout->addLayout(vboxLayout);
-    topLayout->setContentsMargins(100, 0, 100, 0);
-
-    QLayoutItem *item;
-    while ((item = layout()->takeAt(0))) {
-        delete item->widget();
-        delete item;
-    }
-    delete layout();
-
-    setLayout(topLayout);
-}
+private:
+    QPushButton *log_in_button; ///< Кнопка "Войти"
+    QPushButton *sign_up_button; ///< Кнопка "Зарегистрироваться"
+    QLineEdit *username_line_edit; ///< Поле для ввода имени пользователя
+    QLineEdit *password_line_edit; ///< Поле для ввода пароля
+};

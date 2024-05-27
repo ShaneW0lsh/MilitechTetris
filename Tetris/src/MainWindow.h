@@ -1,3 +1,8 @@
+/**
+ * @file mainwindow.h
+ * @brief Заголовочный файл для главного окна приложения
+ */
+
 #pragma once
 
 #include <iostream>
@@ -9,7 +14,7 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QString>
-#include<consoleclient.h>
+#include <consoleclient.h>
 
 #include <QTimer>
 
@@ -19,62 +24,65 @@
 #include "AuthDialog.h"
 // #include "GameWidget.h"
 
+/**
+ * @class MainWindow
+ * @brief Класс для главного окна приложения
+ */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
-    SingClient* client;
+    MainWindow(QWidget *parent = nullptr); ///< Конструктор
+    ~MainWindow(); ///< Деструктор
+    SingClient* client; ///< Клиент
 
 public slots:
-    void apply_start_button();
-    void apply_pause_button();
-    void apply_about_button();
-    void apply_register_button();
-    void handle_sign_up_info(const QString username, const QString password);
+    void apply_start_button(); ///< Обработчик кнопки "Старт"
+    void apply_pause_button(); ///< Обработчик кнопки "Пауза"
+    void apply_about_button(); ///< Обработчик кнопки "О программе"
+    void apply_register_button(); ///< Обработчик кнопки "Регистрация"
+    void handle_sign_up_info(const QString username, const QString password); ///< Обработчик информации о регистрации
 
-    void registration(const QString login, const QString password);
+    void registration(const QString login, const QString password); ///< Регистрация
 
-    void init_game_area();
-    void set_main_layout();
+    void init_game_area(); ///< Инициализация игровой области
+    void set_main_layout(); ///< Установка основного макета
 
-    void update_game_area();
+    void update_game_area(); ///< Обновление игровой области
 
 private:
-    //RegisterWidget *register_widget;
-    void init_window();
-    void init_widgets();
-    void show_auth_dialog();
+    void init_window(); ///< Инициализация окна
+    void init_widgets(); ///< Инициализация виджетов
+    void show_auth_dialog(); ///< Отображение диалога аутентификации
 
+    void connect_widgets(); ///< Подключение виджетов
 
-    void connect_widgets();
+    QTimer *timer; ///< Таймер
+    Tetris::core::Board board; ///< Доска
 
-    QTimer *timer;
-    Tetris::core::Board board;
+    std::function<std::unique_ptr<Tetris::core::Tetromino>()> piece_randomizer; ///< Генератор случайной фигуры
 
-    std::function<std::unique_ptr<Tetris::core::Tetromino>()> piece_randomizer;
+    QPushButton *start_button; ///< Кнопка "Старт"
+    QPushButton *pause_button; ///< Кнопка "Пауза"
+    QPushButton *about_button; ///< Кнопка "О программе"
+    QPushButton *register_button; ///< Кнопка "Регистрация"
+    QPushButton *sign_in_button; ///< Кнопка "Вход"
+    QPushButton *sign_up_button; ///< Кнопка "Регистрация"
 
-    QPushButton *start_button;
-    QPushButton *pause_button;
-    QPushButton *about_button;
-    QPushButton *register_button;
-    QPushButton *sign_in_button;
-    QPushButton *sign_up_button;
+    QHBoxLayout *main_layout; ///< Основной макет
+    QHBoxLayout *buttons_layout; ///< Макет кнопок
 
-    QHBoxLayout *main_layout;
-    QHBoxLayout *buttons_layout;
+    QLineEdit *username_line_edit; ///< Поле для ввода имени пользователя
+    QLineEdit *password_line_edit; ///< Поле для ввода пароля
 
-    QLineEdit *username_line_edit;
-    QLineEdit *password_line_edit;
+    AuthDialog* ad; ///< Диалог аутентификации
 
-    AuthDialog* ad;
+    Tetris::gui::GameRenderer *game_renderer; ///< Рендерер игры
 
-    Tetris::gui::GameRenderer *game_renderer;
+    unsigned lines; ///< Количество строк
+    unsigned level; ///< Уровень
+    unsigned score; ///< Очки
 
-    unsigned lines;
-    unsigned level;
-    unsigned score;
 protected:
-    void keyReleaseEvent(QKeyEvent* e) override;
+    void keyReleaseEvent(QKeyEvent* e) override; ///< Обработчик отпускания клавиши
 };

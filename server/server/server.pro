@@ -22,3 +22,6 @@ HEADERS += \
     function.h \
     server.h \
     singleton.h
+
+SUBDIRS += \
+    ../../Tetris/src/tetris.pro

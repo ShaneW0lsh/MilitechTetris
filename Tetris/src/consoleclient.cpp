@@ -1,50 +1,87 @@
+/**
+ * @file consoleclient.h
+ * @brief Заголовочный файл для класса SingClient
+ */
 
-#include<consoleclient.h>
-SingClient::SingClient()
-{
-    socket = new QTcpSocket;
-    socket->connectToHost("127.0.0.1", 5555);
-    connect(socket,&QTcpSocket::readyRead,this,&SingClient::slot_readFromServer);
-}
-SingClient::~SingClient()
-{
-    socket->close();
-    delete p_instance;
-}
+#pragma once
 
-SingClient* SingClient::getInstance() {
-    if(!p_instance)
-    {
-        p_instance = new SingClient();
-        destroyer.initialize(p_instance);
-    }
-    return p_instance;
-}
+#include <QTcpSocket>
+#include <QString>
+#include <QByteArray>
+#include <QDebug>
 
-QString SingClient::sendToServer(const QString& msg)
-{
-    try {
-        socket->write(msg.toUtf8());
-        socket->waitForReadyRead();
-        return Message;
-    } catch (const std::exception& e){
-        socket->disconnectFromHost();
-        return "Disconnecting";
-    }
-}
+/**
+ * @class SingClient
+ * @brief Класс клиента для общения с сервером
+ */
+class SingClient : public QObject {
+    Q_OBJECT
 
+public:
+    /**
+     * @brief Конструктор класса SingClient
+     */
+    SingClient();
 
-void SingClient::slot_readFromServer()
-{
-    QByteArray data;
-    QString message;
-    while(socket->bytesAvailable()){
-        data = socket->readAll();
-        message.append(data);
-    }
-    data.clear();
-    Message = message;
-    qDebug() <<"Message from server:" << message;
-}
-SingClient * SingClient::p_instance;
-SingClientDestroyer SingClient::destroyer;
+    /**
+     * @brief Деструктор класса SingClient
+     */
+    ~SingClient();
+
+    /**
+     * @brief Получение экземпляра класса SingClient
+     * @return Указатель на экземпляр класса SingClient
+     */
+    static SingClient* getInstance();
+
+    /**
+     * @brief Отправка сообщения на сервер
+     * @param msg Сообщение для отправки
+     * @return Ответ от сервера
+     */
+    QString sendToServer(const QString& msg);
+
+private slots:
+    /**
+     * @brief Слот для чтения данных от сервера
+     */
+    void slot_readFromServer();
+
+private:
+    QTcpSocket *socket; ///< Сокет для соединения с сервером
+    static SingClient *p_instance; ///< Указатель на экземпляр класса SingClient
+    QString Message; ///< Сообщение от сервера
+
+    /**
+     * @brief Конструктор копирования класса SingClient
+     */
+    SingClient(const SingClient&) = delete;
+
+    /**
+     * @brief Оператор присваивания класса SingClient
+     */
+    SingClient& operator=(const SingClient&) = delete;
+
+    /**
+     * @brief Уничтожение экземпляра класса SingClient
+     */
+    class SingClientDestroyer {
+    public:
+        /**
+         * @brief Инициализация уничтожителя
+         * @param p Указатель на экземпляр класса SingClient
+         */
+        void initialize(SingClient *p) {
+            p_instance = p;
+        }
+
+        /**
+         * @brief Деструктор уничтожителя
+         */
+        ~SingClientDestroyer() {
+            delete p_instance;
+        }
+    };
+
+    static SingClientDestroyer destroyer; ///< Уничтожитель экземпляра класса SingClient
+};
